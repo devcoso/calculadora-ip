@@ -8,6 +8,7 @@ export default class IP {
         }
         this.mask = mascara
         this.maskBinary = mask
+        this.submask = mask
     }
 
     getIp() {
@@ -16,6 +17,14 @@ export default class IP {
 
     setIp(ip) {
         this.ip = ip
+    }
+
+    setSubMask(submask) {
+        this.submask = submask
+    }
+
+    getSubMask() {
+        return this.submask
     }
 
     getMask() { 
@@ -61,6 +70,10 @@ export default class IP {
             red.push(this.ip[i] & this.mask[i])
         }
         return red.join('.')
+    }
+
+    getRedArray() {
+        return this.getRed().split('.').map(octet => parseInt(octet))
     }
 
     getBroadcast() {
@@ -122,7 +135,8 @@ export default class IP {
     static validarIP(ip) { 
         let ipArray = ip.split('.')
         for(let i = 0; i < 4; i++) {
-            if(ipArray[i] < 0 || ipArray[i] > 255) {
+            console.log()
+            if(ipArray[i] < 0 || ipArray[i] > 255 || ipArray[i] === '') {
                 return false
             }
         }
