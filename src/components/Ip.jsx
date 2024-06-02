@@ -7,8 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Ip({ip, setIp}) {
     const [typeMask, setTypeMask] = useState(0)
-    const [valueMask, setValueMask] = useState(0)
-    const [valueIp, setValueIp] = useState('')
+    const [valueMask, setValueMask] = useState(24)
+    const [valueIp, setValueIp] = useState('192.168.1.0')
 
     function handletValueIp(value) {
         if(IP.validarIP(value)) {
@@ -104,17 +104,6 @@ export default function Ip({ip, setIp}) {
                 <div className="w-full xl:w-2/3 bg-white p-3 rounded-md">
                     <p className="text-neutral-600 font-bold text-sm md:text-base">Hexadecimal</p>
                     <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">{ip.getIpHex()}</p>
-                </div>
-            </div>
-            <div className="flex flex-col gap-3 items-center">
-                <div className="w-full xl:w-2/3 bg-white p-3 rounded-md">
-                    <p className="text-neutral-600 font-bold text-sm md:text-base">Binario</p>
-                    <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">11111111.11111111.11111111.11111111</p>
-                    <div className="flex justify-center gap-3">
-                        <p className="text-red-600 font-bold">Red</p>
-                        <p className="text-blue-600 font-bold">Subred</p>
-                        <p className="text-green-600 font-bold">Host</p>
-                    </div>
                 </div>
             </div>
         </div>

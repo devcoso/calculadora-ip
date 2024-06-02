@@ -1,5 +1,5 @@
 export default class IP {
-    constructor(ip = [0,0,0,0], mask = 0) {
+    constructor(ip = [192,168,1,0], mask = 24) {
         this.ip = ip
         let mascara = [0, 0, 0, 0]
         for(let j = 0; j < mask; j++) {
@@ -7,6 +7,7 @@ export default class IP {
             mascara[octeto] = mascara[octeto] + 2 ** (7 - j % 8)
         }
         this.mask = mascara
+        this.maskBinary = mask
     }
 
     getIp() {
@@ -19,6 +20,10 @@ export default class IP {
 
     getMask() { 
         return this.mask
+    }
+
+    getMaskBinary() {
+        return this.maskBinary
     }
 
     setMask(mask) {
@@ -46,7 +51,7 @@ export default class IP {
             return 16
         } else if(this.ip[0] >= 192 && this.ip[0] <= 223) {
             return 24
-        } else return 0
+        } else return 24
     }
 
 

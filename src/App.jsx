@@ -16,7 +16,7 @@ function App() {
         </div>
         <div className="flex flex-col md:flex-row md:h-5/6 mx-3 md:mx-8 gap-5 items-center mb-8">
           <Ip ip={ip} setIp={setIp}/>
-          < Subred/>
+          <Subred ip={ip} setIp={setIp}/>
         </div>
       </div>
       <div className='p-6 bg-zinc-100 mt-20 text-center flex flex-col justify-center text-sky-600 font-bold'>
