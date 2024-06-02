@@ -125,7 +125,7 @@ export default function Subred({ip, setIp}) {
                 Calcular Subredes
             </button>
         </form>
-        <div className="justify-center h-96 md:h-auto overflow-auto bg-white md:flex-grow flex flex-col justify-between"> 
+        <div className="h-96 md:h-auto overflow-auto bg-white md:flex-grow flex flex-col justify-between"> 
             {pages > 1 && <div className="flex justify-between space-x-3 my-2">
                     <p className="text-neutral-600 text-sm">Página <span className="text-sky-600 font-bold">{page + 1}</span>  de <span className="text-sky-600 font-bold">{pages}</span></p>
                     <div className="flex justify-center space-x-3">

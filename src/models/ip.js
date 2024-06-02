@@ -1,3 +1,5 @@
+import { toast } from "react-toastify"
+
 export default class IP {
     constructor(ip = [192,168,1,0], mask = 24) {
         this.ip = ip
@@ -111,6 +113,12 @@ export default class IP {
         return this.ip.map(octeto => octeto.toString(16)).join('.')
     }
 
+    getIpBin() {
+        return this.ip.map(octeto => {
+            return ('00000000' + octeto.toString(2)).slice(-8);
+          }).join('.');
+    }
+
     //Utilidades
     static mostrarTypeMask = (bitsRed, typeMask) => {
         if(typeMask === 0) {
@@ -142,5 +150,4 @@ export default class IP {
         }
         return /^[0-9]+$/.test(ipArray.join('')) && ipArray.length === 4;
     }
-
 }

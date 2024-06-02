@@ -5,6 +5,8 @@ import IP from '../models/ip'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import easterEggs from '../helper.js/easterEggs';
+
 export default function Ip({ip, setIp}) {
     const [typeMask, setTypeMask] = useState(0)
     const [valueMask, setValueMask] = useState(24)
@@ -19,6 +21,19 @@ export default function Ip({ip, setIp}) {
     }
 
     function handleCrearIP(e) {
+        if(easterEggs[valueIp] !== undefined) {
+            // Abrir una nueva pestaña con una URL específica
+            toast(easterEggs[valueIp], {
+                position: "top-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
         e.preventDefault()
         if(IP.validarIP(valueIp)) {
             let nuevaIp = valueIp.split('.')
@@ -38,6 +53,24 @@ export default function Ip({ip, setIp}) {
                 theme: "colored",
             });
         }
+    }
+
+    function showIPBin(ip) {
+        let mask = +ip.getMaskBinary()
+        let submask = +ip.getSubMask() - mask
+        return ip.getIpBin().split('').map((char, i) => {
+            let key = "ipBin" + i
+            if(char === '.') return <span key={key} className='text-neutral-600'>{char}</span>
+            else if(mask > 0){
+                mask--
+                return <span key={key} className='text-red-600'>{char}</span>
+            } 
+            else if(submask > 0){
+                submask--
+                return <span key={key} className='text-blue-600'>{char}</span>
+            } 
+            else return <span key={key} className='text-green-600'>{char}</span> 
+        })
     }
 
     return (
@@ -74,7 +107,7 @@ export default function Ip({ip, setIp}) {
                 Calcular IP
             </button>
         </form>
-        <div className="space-y-1 flex flex-col justify-center flex-grow md:overflow-y-auto">
+        <div className="space-y-1 md:overflow-y-auto">
             <p className="text-sky-600 font-bold md:text-lg lg:text-xl text-center block">Información de la red</p>
             <div className="flex flex-col gap-3 items-center">
                 <div className="w-full bg-white p-3 rounded-md flex justify-between">
@@ -109,8 +142,9 @@ export default function Ip({ip, setIp}) {
             <div className="flex flex-col gap-3 items-center">
                 <div className="w-full bg-white p-3 rounded-md">
                         <p className="text-neutral-600 font-bold text-sm md:text-base text-center">Binario</p>
-                        <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">11111111.11111111.11111111.11111111</p>
-                        <p>{ip.getSubMask()}</p>
+                        <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">{
+                            showIPBin(ip)
+                        }</p>
                     <div className="flex justify-center gap-3">
                         <p className="text-red-600 font-bold">Red</p>
                         <p className="text-blue-600 font-bold">Subred</p>
