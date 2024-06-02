@@ -118,7 +118,7 @@ export default function Ip({ip, setIp}) {
             <div className="flex flex-col gap-3 items-center">
                 <div className="w-full bg-white p-3 rounded-md flex justify-between">
                     <p className="text-neutral-600 font-bold text-sm md:text-base">Red</p>
-                    <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">{ip.getRed()}</p>
+                    <p className="text-neutral-800 font-extrabold text-sm md:text-base text-center">{ip.getRed()}/{ip.getMaskBinary()}</p>
                 </div>
             </div>
             <div className="flex flex-col gap-3 items-center">
