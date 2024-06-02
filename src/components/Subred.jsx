@@ -7,31 +7,53 @@ export default function Subred({ip, setIp}) {
     const [typeMask, setTypeMask] = useState(0)
     const [valueMask, setValueMask] = useState(24)
     const [subredes, setSubredes] = useState([])
+    const [page, setPage] = useState(0)
+    const [pages, setPages] = useState(0)
 
     function handleCrearSubredes(e) {
         e.preventDefault()
         let newIP = new IP(ip.getIp(), ip.getMaskBinary())
         newIP.setSubMask(valueMask)
         setIp(newIP)
-        generarSubredes()
+        setPage(0)
+        generarSubredes(0, 256)
     }
 
     useEffect(() => {
         setValueMask(ip.getSubMask())
-        generarSubredes()
+        setPage(0)
+        setPages((2**(parseInt(ip.getSubMask()) - ip.getMaskBinary())) / 256)
+        generarSubredes(0, 256)
     }, [ip])
 
-    function generarSubredes() {   
+    function generarSubredes(desde, hasta) {
+        //Valores lógicos
         let subredes = []
         let subnetMask = parseInt(ip.getSubMask())
         let salto = 2**(32 - subnetMask)
         let numSubredes = 2**(subnetMask - ip.getMaskBinary())
         let octetoUltimo = Math.floor(ip.getMaskBinary() / 8)
 
-        let ipRed = ip.getRedArray()
-        
+        if(hasta > numSubredes) {
+            hasta = numSubredes
+        }
 
-        for(let i = 0; i < 2000; i++) {
+        //Empieza en la red indicada
+        let octeto = 3
+        let ipRed = ip.getRedArray()
+        ipRed[octeto] = ipRed[octeto] + salto*desde
+        while(octeto > octetoUltimo) {
+            if(ipRed[octeto] > 255) {
+                ipRed[octeto - 1] += Math.floor(ipRed[octeto] / 256)
+                ipRed[octeto] = ipRed[octeto] % 256
+                octeto--
+            } else {
+                break
+            }
+        }
+
+        //Generar subredes
+        for(let i = desde; i < hasta; i++) {
             let octeto = 3
             let newIP = new IP(ipRed, subnetMask)
             let subnet = {
@@ -56,6 +78,18 @@ export default function Subred({ip, setIp}) {
             ipRed = suma
         }
         setSubredes(subredes)
+    }
+
+    function handlePaginacion(e) {
+        let newPage = page + e
+        if(newPage < 0) {
+            newPage = 0
+        }
+        if(newPage >= pages) {
+            newPage = pages - 1
+        }
+        setPage(newPage)
+        generarSubredes(newPage*256, (newPage + 1)*256)
     }
 
   return (
@@ -91,7 +125,14 @@ export default function Subred({ip, setIp}) {
                 Calcular Subredes
             </button>
         </form>
-        <div className="justify-center h-96 md:h-auto overflow-auto bg-white md:flex-grow"> 
+        <div className="justify-center h-96 md:h-auto overflow-auto bg-white md:flex-grow flex flex-col justify-between"> 
+            {pages > 1 && <div className="flex justify-between space-x-3 my-2">
+                    <p className="text-neutral-600 text-sm">Página <span className="text-sky-600 font-bold">{page + 1}</span>  de <span className="text-sky-600 font-bold">{pages}</span></p>
+                    <div className="flex justify-center space-x-3">
+                        <button className="bg-sky-600 hover:bg-sky-500 text-white font-bold border-b-4 px-2 border-blue-700 hover:border-blue-500 rounded text-sm" onClick={() => handlePaginacion(-1)}>Anterior</button>
+                        <button className="bg-sky-600 hover:bg-sky-500 text-white font-bold border-b-4 px-2 border-blue-700 hover:border-blue-500 rounded text-sm" onClick={() => handlePaginacion(1)}>Siguiente</button>    
+                    </div>    
+            </div>}
             <table className="table-auto w-full">
                 <thead className="text-white font-bold text-lg bg-sky-600 border-white">
                     <tr>
@@ -112,6 +153,15 @@ export default function Subred({ip, setIp}) {
                     ))}
                 </tbody>
             </table>
+            <div>
+                {pages > 1 && <div className="flex justify-between space-x-3 my-2">
+                    <p className="text-neutral-600 text-sm">Página <span className="text-sky-600 font-bold">{page + 1}</span>  de <span className="text-sky-600 font-bold">{pages}</span></p>
+                    <div className="flex justify-center space-x-3">
+                        <button className="bg-sky-600 hover:bg-sky-500 text-white font-bold border-b-4 px-2 border-blue-700 hover:border-blue-500 rounded text-sm" onClick={() => handlePaginacion(-1)}>Anterior</button>
+                        <button className="bg-sky-600 hover:bg-sky-500 text-white font-bold border-b-4 px-2 border-blue-700 hover:border-blue-500 rounded text-sm" onClick={() => handlePaginacion(1)}>Siguiente</button>    
+                    </div>    
+                </div>}
+            </div>
         </div>
     </div>
   )
