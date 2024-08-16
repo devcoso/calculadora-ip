@@ -20,10 +20,7 @@ function App() {
         </div>
       </div>
       <div className='p-6 bg-zinc-100 mt-20 text-center flex flex-col justify-center text-sky-600 font-bold'>
-        <a href="/armando.jpeg" target='_blank'>Guzmán Blanco José Armando</a>
-        <a href="/lucas.jpg" target='_blank'>Hernández Sumaya Lucas Melvin</a>
-        <a href="https://www.github.com/devcoso" target='_blank'>Medina Paredes José David</a>
-        <a href="https://github.com/PRdzSan" target='_blank'>Rodríguez Sánchez Pablo</a>
+        <a href="https://www.github.com/devcoso" target='_blank'>devcoso</a>
         <p className='text-zinc-600'>&copy; {new Date().getFullYear()}</p>
       </div>
     </>
